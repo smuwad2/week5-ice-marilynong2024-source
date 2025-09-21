@@ -23,8 +23,70 @@
 
         </div>
         <script>
-            function getData() {
- 
+            async function getData() {
+                // const type = document.getElementById("type").value;
+                // const limit = document.getElementById("limit").value;
+                // try {
+                //     const response = await axios.get('/data?type=${type}&limit=${limit}');
+
+                //     console.log('success', response.data);
+                // } catch (error){
+                //     console.log('error', error)
+                // }
+
+                // issue GET to /data
+                try{
+                    const response = await axios.get("/data", {
+                        "params": {
+                            "type": document.getElementById("type").value,
+                            "limit": document.getElementById("limit").value
+                        }
+                    })
+                    generateTable(response.data);
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+            function generateTable(dataObj){
+                const resultDivElem = document.getElementById('result');
+                while (resultDivElem.firstChild){
+                    resultDivElem.firstChild.remove();
+
+                }
+                const h2Elem = document.createElement("h2");
+                h2Elem.innerText = dataObj['type'];
+                resultDivElem.appendChild(h2Elem);
+
+                let tableElem = document.createElement('table');
+                tableElem.className = 'table';
+                let tBodyElem = document.createElement('tbody');
+                let trElem = document.createElement('tr');
+
+                // retrieve the table heading labels
+                const tblHeadingLabels = Object.keys(dataObj['records'][0]); // this will give u back an array
+                for (let headinglabel of tblHeadingLabels){
+                    let thElem = document.createElement('th');
+                    thElem.innerText = headinglabel;
+                    trElem.appendChild(thElem);
+                }
+                tBodyElem.appendChild(trElem);
+
+                // create table data
+                for ( let i=0; i < dataObj['records'].length; i++ ){
+                    const trElem = document.createElement('tr');
+                    let elem = dataObj['records'][i];
+                    
+                    for (let j=0; j < tblHeadingLabels.length; j++){
+                        const elemVal = elem[tblHeadingLabels[j]]; // this will give the value of the key
+                        const tdElem = document.createElement('td');
+                        tdElem.innerText = elemVal;
+                        trElem.appendChild(tdElem);
+                    }
+                    tBodyElem.appendChild(trElem);
+                }
+                tableElem.appendChild(tBodyElem);
+                resultDivElem.appendChild(tableElem);
             }
 
         </script>
