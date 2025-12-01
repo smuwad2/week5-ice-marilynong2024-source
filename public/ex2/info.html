@@ -39,7 +39,7 @@
                     const response = await axios.get("/data", {
                         "params": {
                             "type": document.getElementById("type").value,
-                            "limit": document.getElementById("limit").value
+                            "limit": document.getElementById("limit").value,
                         }
                     })
                     generateTable(response.data);
