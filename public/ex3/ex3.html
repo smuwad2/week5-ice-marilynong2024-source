@@ -98,38 +98,34 @@
 
 
         function showItems(items) {
-            // Display the items in the itemsList div
-            // Each item should be displayed in a bootstrap card format
-            // The display should be responsive 3 columns on large screens, 2 columns on medium screens, and 1 column on small screens
-            const itemsList = document.getElementById("itemsList");
-            itemsList.innerHTML = "";
+            let itemsListDiv = document.getElementById("itemsList");
+            itemsListDiv.replaceChildren();
+            items.forEach((item, idx) => {
+                let colDiv = document.createElement("div");
+                colDiv.className = "col-4 d-flex justify-content-center";
 
-            if (!items || items.length === 0) {
-                itemsList.innerHTML = `<p class="text-center">No items found</p>`;
-                return;
-            }
+                let itemDiv = document.createElement("div");
+                itemDiv.className = "card mb-3";
+                itemDiv.style.width = "18rem";
 
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                const col = document.createElement("div");
-                col.className = "col-lg-4 col-md-6 col-sm-12 mb-3";
+                let cardBody = document.createElement("div");
+                cardBody.className = "card-body text-center";
 
-                col.innerHTML = `
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.name}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">${item.category}</h6>
-                            <p class="card-text">Price: $${item.price.toFixed(2)}</p>
-                            <p class="card-text">Available: ${item.quantity}</p>
-                            <button class="btn btn-primary" onclick="addToCart('${item.name}')">Add to Cart</button>
-                        </div>
-                        </div>
-                `;  
+                let itemTitle = document.createElement("h5");
+                itemTitle.className = "card-title";
+                itemTitle.textContent = item.name;
 
-                document.getElementById("itemsList").appendChild(col);
-            }
-            
+                let itemText = document.createElement("p");
+                itemText.className = "card-text";
+                itemText.textContent = `Price: $${item.price.toFixed(2)}`;
 
+                cardBody.appendChild(itemTitle);
+                cardBody.appendChild(itemText);
+
+                itemDiv.appendChild(cardBody);
+                colDiv.appendChild(itemDiv);
+                itemsListDiv.appendChild(colDiv)
+            });
         }
 
     </script>
@@ -138,5 +134,3 @@
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
 </body>
-
-</html>
